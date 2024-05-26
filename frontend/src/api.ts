@@ -1,6 +1,6 @@
 // make the API call
-const seachRecipes = async (searchTerm: string, page: number) => {
-  const baseURL = new URL("http://localhost:300/api/recipes/search");
+const searchRecipes = async (searchTerm: string, page: number) => {
+  const baseURL = new URL("http://localhost:3000/api/recipe/search");
   baseURL.searchParams.append("searchTerm", searchTerm);
   baseURL.searchParams.append("page", page.toString());
 
@@ -12,4 +12,4 @@ const seachRecipes = async (searchTerm: string, page: number) => {
   return response.json();
 };
 
-export { seachRecipes };
+export { searchRecipes };
