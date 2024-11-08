@@ -5,3 +5,10 @@ export interface Recipe {
   image: string;
   imageType: string;
 }
+
+// Recipe Summary Interface
+export interface RecipeSummary {
+  id: number;
+  title: string;
+  summary: string;
+}
