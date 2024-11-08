@@ -1,3 +1,4 @@
+// component to display the individual recipe data
 import { Recipe } from "../types";
 
 interface Props {
