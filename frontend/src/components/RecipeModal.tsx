@@ -7,9 +7,10 @@ interface Props {
   onClose: () => void;
 }
 
-const RecipeModal = ({ recipeId }: Props) => {
+const RecipeModal = ({ recipeId, onClose }: Props) => {
   const [recipeSummary, setRecipeSummary] = useState<RecipeSummary>();
 
+  // anytime the recipe id changes fetch the recipe summary
   useEffect(() => {
     const fetchRecipeSummary = async () => {
       try {
@@ -33,8 +34,10 @@ const RecipeModal = ({ recipeId }: Props) => {
       <div className="modal">
         <div className="modal-content">
           <div className="modal-header">
-            <h2>{recipeSummary?.title}</h2>
-            <span className="close-btn">&times;</span>
+            <h2>{recipeSummary.title}</h2>
+            <span className="close-btn" onClick={onClose}>
+              &times;
+            </span>
           </div>
           {/* need to use dangerouslySetInnerHTML because the summary contains html tags within the text string */}
           <p dangerouslySetInnerHTML={{ __html: recipeSummary.summary }}></p>
