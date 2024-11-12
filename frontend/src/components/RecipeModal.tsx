@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RecipeSummary } from "../types";
+import * as RecipeAPI from "../api";
 
 interface Props {
   recipeId: string;
   onClose: () => void;
 }
 
-const RecipeModal = () => {
+const RecipeModal = ({ recipeId }: Props) => {
   const [recipeSummary, setRecipeSummary] = useState<RecipeSummary>();
-  // if recipeSummary is undefined return empty jsx. need this or there'll be errors with the recipe summary paragraph
-  if (!recipeSummary) {
-    return <></>;
-  }
 
   useEffect(() => {
     const fetchRecipeSummary = async () => {
       try {
-        const summary = await getRecipeSummary(recipeId);
+        const summaryRecipe = await RecipeAPI.getRecipeSummary(recipeId);
         setRecipeSummary(summaryRecipe);
       } catch (error) {
         console.log(error);
       }
     };
     fetchRecipeSummary();
-  }, recipeId);
+  }, [recipeId]);
+
+  // if recipeSummary is undefined return empty jsx. need this or there'll be errors with the recipe summary paragraph
+  if (!recipeSummary) {
+    return <></>;
+  }
 
   return (
     <>

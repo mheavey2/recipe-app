@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { FormEvent, useState, useRef } from "react";
+import { FormEvent, useState, useRef } from "react";
 import { Recipe } from "./types";
 import RecipeCard from "./components/RecipeCard";
 import * as api from "./api";
@@ -76,7 +76,9 @@ const App = () => {
         View More
       </button>
       {/* if have selected recipe display the recipe modal */}
-      {selectedRecipe ? <RecipeModal /> : null}
+      {selectedRecipe ? (
+        <RecipeModal recipeId={selectedRecipe.id.toString()} />
+      ) : null}
     </div>
   );
 };
