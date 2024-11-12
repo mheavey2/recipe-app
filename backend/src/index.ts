@@ -22,7 +22,7 @@ app.get("/api/recipe/search", async (req, res) => {
 app.get("/api/recipe/:recipeId/summary", async (req, res) => {
   const recipeId = req.params.recipeId;
   const result = await RecipeAPI.getRecipeSummary(recipeId);
-  res.json(result);
+  return res.json(result);
 });
 
 app.listen(3000, () => {
