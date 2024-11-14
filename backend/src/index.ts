@@ -27,19 +27,57 @@ app.get("/api/recipe/:recipeId/summary", async (req, res) => {
   return res.json(result);
 });
 
-// create post endpoint using PrismaClient to handle posting operations on the favoutrite recipes database
-app.post("api/recipe/favourite", async (req, res) => {
-  const { recipeId } = req.body;
+// create post endpoint using PrismaClient to handle posting operations on the favourite recipes database
+app.post("/api/recipe/favourite", async (req, res) => {
+  const recipeId = req.body.recipeId;
+
   try {
+    // create favourite recipe row item with the recipe id in the database
     const favouriteRecipe = await prismaClient.favouriteRecipes.create({
-      data: { recipeId },
+      data: {
+        recipeId: recipeId,
+      },
     });
-    res.status(201).json(favouriteRecipe);
+    // return created status and the recipe created by Prisma back to the frontend
+    return res.status(201).json(favouriteRecipe);
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ error: "favourite recipe post error. Something went wrong." });
+    // if there's an error, log it to the console and return an error status and generic message to the frontend
+    console.log(error);
+    return res.status(500).json({ error: "Something went wrong." });
+  }
+});
+
+// create get endpoint to return favourite from database
+app.get("/api/recipe/favourite", async (req, res) => {
+  try {
+    // get the recipe ids saved in the database
+    const recipes = await prismaClient.favouriteRecipes.findMany();
+    // iterate over all the returned recipe ids and convert them to string values stored in an array
+    const recipeIds = recipes.map((recipe) => recipe.recipeId.toString());
+    const favourites = await RecipeAPI.getFavouriteRecipesById(recipeIds);
+    return res.json(favourites);
+  } catch (error) {
+    // if there's an error, log it to the console and return an error status and generic message to the frontend
+    console.log(error);
+    return res.status(500).json({ error: "Something went wrong." });
+  }
+});
+
+// create delete endpoint to delete favourites from the database
+app.delete("/api/recipe/favourite", async (req, res) => {
+  const recipeId = req.body.recipeId;
+  try {
+    await prismaClient.favouriteRecipes.delete({
+      where: {
+        recipeId: recipeId,
+      },
+    });
+
+    return res.status(204).send();
+  } catch (error) {
+    // if there's an error, log it to the console and return an error status and generic message to the frontend
+    console.log(error);
+    return res.status(500).json({ error: "Something went wrong." });
   }
 });
 

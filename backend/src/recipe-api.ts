@@ -47,3 +47,20 @@ export const getRecipeSummary = async (recipeId: string) => {
   const json = await response.json();
   return json;
 };
+
+// fetch favourite recipes from spoonacular api using the ids retrieved from the favourites database
+export const getFavouriteRecipesById = async (ids: string[]) => {
+  if (!apiKey) {
+    throw new Error("API key not found");
+  }
+  const url = new URL("https://api.spoonacular.com/recipes/informationBulk");
+  const params = {
+    apiKey: apiKey,
+    // api requires ids to be CSVs
+    ids: ids.join(","),
+  };
+  url.search = new URLSearchParams(params).toString();
+  const searchResponse = await fetch(url);
+  const json = await searchResponse.json();
+  return { results: json };
+};
