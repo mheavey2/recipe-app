@@ -1,3 +1,5 @@
+import { Recipe } from "./types";
+
 // make the API call to search for recipes
 export const searchRecipes = async (searchTerm: string, page: number) => {
   const baseURL = new URL("http://localhost:3000/api/recipe/search");
@@ -31,6 +33,54 @@ export const getFavouriteRecipes = async () => {
   if (!response.ok) {
     throw new Error(`HTTP Error: ${response.status}`);
   }
-  const json = await response.json();
-  return json;
+
+  return await response.json();
+};
+
+// add favourite recipe i.e create a new entry in the favourites database
+
+export const addFavouriteRecipe = async (recipe: Recipe) => {
+  const url = new URL("http://localhost:3000/api/recipe/favourite");
+  //the body of the object to create
+  const body = {
+    recipeId: recipe.id,
+  };
+
+  //the post fetch request
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    //convert body object to string for use in the request
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP Error: ${response.status}`);
+  }
+};
+
+//remove favourite recipe
+
+export const removeFavouriteRecipe = async (recipe: Recipe) => {
+  const url = new URL("http://localhost:3000/api/recipe/favourite");
+  //the body of the object to remove
+  const body = {
+    recipeId: recipe.id,
+  };
+
+  //the delete fetch request
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    //convert body object to string for use in the request
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP Error: ${response.status}`);
+  }
 };

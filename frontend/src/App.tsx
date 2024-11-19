@@ -29,7 +29,8 @@ const App = () => {
     const fetchFavouriteRecipes = async () => {
       try {
         const favouriteRecipes = await api.getFavouriteRecipes();
-        setFavouriteRecipes(favouriteRecipes);
+        // need to call favouriteRecipes.results rather than just favouriteRecipes because top level is object, .results contains the array we need with results (otherwise map() won't work)
+        setFavouriteRecipes(favouriteRecipes.results);
       } catch (error) {
         console.log(error);
       }
@@ -68,6 +69,32 @@ const App = () => {
     }
   };
 
+  // handle adding favourite recipe
+  const addFavouriteRecipe = async (recipe: Recipe) => {
+    try {
+      await api.addFavouriteRecipe(recipe);
+      //add selected recipe to the current array of favourites
+      setFavouriteRecipes([...favouriteRecipes, recipe]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //handle removing favourite recipe
+  const removeFavouriteRecipe = async (recipe: Recipe) => {
+    try {
+      await api.removeFavouriteRecipe(recipe);
+      //filter favourite recipes array for all bar the selected recipe
+      const updatedRecipes = favouriteRecipes.filter(
+        (favRecipe) => recipe.id !== favRecipe.id
+      );
+      //set the state to the newly filtered array
+      setFavouriteRecipes(updatedRecipes);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div className="tabs">
@@ -92,13 +119,27 @@ const App = () => {
           </form>
           {/* iterate over the recipes & display each recipe using the RecipeCard component*/}
           <div className="recipe-grid">
-            {recipes.map((recipe: Recipe) => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                onClick={() => setSelectedRecipe(recipe)}
-              />
-            ))}
+            {Array.isArray(recipes)
+              ? recipes.map((recipe: Recipe) => {
+                  // check if the current recipe being mapped is part of the favourite recipes array. returns boolean to the variable
+                  const isFavourite = favouriteRecipes.some(
+                    (favRecipe) => recipe.id === favRecipe.id
+                  );
+
+                  return (
+                    <RecipeCard
+                      key={recipe.id}
+                      recipe={recipe}
+                      isFavourite={isFavourite}
+                      onClick={() => setSelectedRecipe(recipe)}
+                      // add favourite when click the heart icon
+                      onFavouriteButtonClick={
+                        isFavourite ? removeFavouriteRecipe : addFavouriteRecipe
+                      }
+                    />
+                  );
+                })
+              : null}
           </div>
 
           {/* button to display more recipes */}
@@ -111,13 +152,18 @@ const App = () => {
       {/* if favourite tab is selected, display favourites  */}
       {selectedTab === "favourites" && (
         <div className="recipe-grid">
-          {favouriteRecipes.map((recipe: Recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              recipe={recipe}
-              onClick={() => setSelectedRecipe(recipe)}
-            />
-          ))}
+          {Array.isArray(favouriteRecipes)
+            ? favouriteRecipes.map((recipe: Recipe) => (
+                <RecipeCard
+                  key={recipe.id}
+                  recipe={recipe}
+                  onClick={() => setSelectedRecipe(recipe)}
+                  // remove favourite when click the heart in the favourites tab
+                  onFavouriteButtonClick={removeFavouriteRecipe}
+                  isFavourite={true}
+                />
+              ))
+            : null}
         </div>
       )}
       {/* if have selected recipe display the recipe modal */}

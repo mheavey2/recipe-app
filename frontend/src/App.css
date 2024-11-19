@@ -40,3 +40,9 @@
   gap: 2em;
   cursor: pointer;
 }
+
+.recipe-card-title {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
