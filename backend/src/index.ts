@@ -43,7 +43,9 @@ app.post("/api/recipe/favourite", async (req, res) => {
   } catch (error) {
     // if there's an error, log it to the console and return an error status and generic message to the frontend
     console.log(error);
-    return res.status(500).json({ error: "Something went wrong." });
+    return res
+      .status(500)
+      .json({ error: "Something went wrong in post operation." });
   }
 });
 
@@ -59,7 +61,9 @@ app.get("/api/recipe/favourite", async (req, res) => {
   } catch (error) {
     // if there's an error, log it to the console and return an error status and generic message to the frontend
     console.log(error);
-    return res.status(500).json({ error: "Something went wrong." });
+    return res
+      .status(500)
+      .json({ error: "Something went wrong in get operation." });
   }
 });
 
@@ -77,7 +81,9 @@ app.delete("/api/recipe/favourite", async (req, res) => {
   } catch (error) {
     // if there's an error, log it to the console and return an error status and generic message to the frontend
     console.log(error);
-    return res.status(500).json({ error: "Something went wrong." });
+    return res
+      .status(500)
+      .json({ error: "Something went wrong in delete operation." });
   }
 });
 

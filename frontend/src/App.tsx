@@ -4,6 +4,7 @@ import { Recipe } from "./types";
 import RecipeCard from "./components/RecipeCard";
 import * as api from "./api";
 import RecipeModal from "./components/RecipeModal";
+import { AiOutlineSearch } from "react-icons/ai";
 
 // new type that can only be either of two values 'search' or 'favourites' - helps manage state of selected tab
 type Tabs = "search" | "favourites";
@@ -96,10 +97,24 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="app-container">
+      <div className="header">
+        <img src="/food-image.jpg" alt="image of two asian dishes" />
+        <div className="title">Recipe Finder App</div>
+      </div>
       <div className="tabs">
-        <h1 onClick={() => setSelectedTab("search")}>Recipe Search</h1>
-        <h1 onClick={() => setSelectedTab("favourites")}>Favourites</h1>
+        <h1
+          className={selectedTab === "search" ? "tab-active" : ""}
+          onClick={() => setSelectedTab("search")}
+        >
+          Recipe Search
+        </h1>
+        <h1
+          className={selectedTab === "favourites" ? "tab-active" : ""}
+          onClick={() => setSelectedTab("favourites")}
+        >
+          Favourites
+        </h1>
       </div>
 
       {/* if search tab selected, display search field and associated returned search results when submitted */}
@@ -115,7 +130,9 @@ const App = () => {
               onChange={(event) => setSearchTerm(event.target.value)}
             />
 
-            <button type="submit">Submit</button>
+            <button type="submit">
+              <AiOutlineSearch size={40} />
+            </button>
           </form>
           {/* iterate over the recipes & display each recipe using the RecipeCard component*/}
           <div className="recipe-grid">
@@ -143,7 +160,7 @@ const App = () => {
           </div>
 
           {/* button to display more recipes */}
-          <button className="viewmore" onClick={handleViewMoreClick}>
+          <button className="viewmore-button" onClick={handleViewMoreClick}>
             View More
           </button>
         </>
