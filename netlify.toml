@@ -1,4 +1,13 @@
+[build]
+command = "# no build command"functions = "netlify/functions"
+publish = "public"
+
+
 [[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
+
+[dev]
+command = "npm start"
+port = 3000
