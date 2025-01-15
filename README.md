@@ -6,7 +6,7 @@ This app allows users to view, add and manage their favourite recipes.
 
 This is a fullstack app with a database in the backend that is used to store the users favourite recipes.
 
-It is built using HTML, CSS, and Typescript for the frontend with Node.js and Prisma for the backend.
+It is built using HTML, CSS, Typescript and React for the frontend with Node.js and Prisma for the backend.
 
 ## How to Use the Project
 
